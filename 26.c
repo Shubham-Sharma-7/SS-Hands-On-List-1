@@ -13,28 +13,25 @@ Date: 28th Aug, 2024.
 #include <unistd.h>
 #include <string.h>
 
-void run_as_a_out(int argc, char *argv[]) {
-    if (argc != 2) {
-        printf("Usage: %s <name>\n", argv[0]);
-        exit(1);
-    }
-    printf("Hello, %s!\n", argv[1]);
-    exit(0);
-}
-int main(int argc, char *argv[]) {
-    if (argc > 1 && strcmp(argv[1], "--run-aout") == 0) {
-        run_as_a_out(argc - 1, argv + 1);
-    }
-    char *path = argv[0];
-    char *args[] = { path, "--run-aout", "Shubham", NULL };
-    // Execute the program using execv
-    if (execv(path, args) == -1) {
-        perror("execv failed");
+int main() {
+    char *executable = "./greeting";  
+    char *arg1 = "Shubham";              
+    char *args[] = {executable, arg1, NULL};
+
+    printf("Executing %s with argument %s...\n", executable, arg1);
+
+    // Execute the program
+    if (execvp(executable, args) == -1) {
+        perror("execvp failed");
         exit(EXIT_FAILURE);
     }
-    // This line will never be reached if execv is successful
+
+    // This line will not be executed if execvp is successful
+    printf("This won't be printed if execvp is successful.\n");
+
     return 0;
 }
+
 /*
 ============================================================================
 (base) mohitsharma@MacBook-Pro hands_on_list_1 % gcc 26.c -o 26
